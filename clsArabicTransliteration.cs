@@ -21,12 +21,13 @@ namespace arabic_translit
             foreach (string line in lines)
             {
                 tmp_line = line;
+                tmp_line = tmp_line.TrimStart(new char[] { '\uFEFF', '\u200B' });
                 //#STEP 1 disinguish 'ibn and reduce all plain capitals to lower case
                 /*
                  * $line = ~s /\b\x{ 0069}\x{ 0062}\x{ 006E} / bn / g; #escape lower-case 'ibn'
                    $line = ~tr / A - Z / a - z /;
                  */
-                tmp_line = tmp_line.Replace("\b\u0069\u0062\u006E", "bn");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\b\u0069\u0062\u006E", "bn");
                 tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"[A-Z]", m => m.ToString().ToLower());
 
 
@@ -47,7 +48,7 @@ namespace arabic_translit
                 tmp_line = tmp_line.Replace("\u2032", "\u004F");
                 tmp_line = tmp_line.Replace("\u0027", "\u004F");
                 tmp_line = tmp_line.Replace("\u02BC", "\u004F");
-                tmp_line = tmp_line.Replace("\bO", "");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\bO", "");
 
                 /*
                  * 
@@ -62,12 +63,12 @@ namespace arabic_translit
                 $line=~s/\b\x{0100}/\x{004D}/g; 	#upper case a macrons to M maddah
                  * 
                  */
-                tmp_line = tmp_line.Replace("\b\u012B", "\u0045\u0079");
-                tmp_line = tmp_line.Replace("\b\u012A", "\u0045\u0079");
-                tmp_line = tmp_line.Replace("\b\u016B", "\u004C\u0077");
-                tmp_line = tmp_line.Replace("\b\u016A", "\u004C\u0077");
-                tmp_line = tmp_line.Replace("\b\u0101", "\u004D");
-                tmp_line = tmp_line.Replace("\b\u0100", "\u004D");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\b\u012B", "\u0045\u0079");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\b\u012A", "\u0045\u0079");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\b\u016B", "\u004C\u0077");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\b\u016A", "\u004C\u0077");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\b\u0101", "\u004D");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\b\u0100", "\u004D");
 
                 /*
                  * #C - diphtongs word-/ sentence-initial, after dash (diphtongs already lower case at this point)
@@ -76,8 +77,8 @@ namespace arabic_translit
                 $line=~s/\b\x{0061}\x{0077}/\x{004C}\x{0077}/g; 	#aw to Lw alif sup hamzah plus waw
 
                 */
-                tmp_line = tmp_line.Replace("\b\u0061\u0079", "\u004C\u0079");
-                tmp_line = tmp_line.Replace("\b\u0061\u0077", "\u004C\u0077");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\b\u0061\u0079", "\u004C\u0079");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\b\u0061\u0077", "\u004C\u0077");
 
                 /*
                  * #STEP 2A CONVERT INITIAL SHORT VOWELS TO ALIF
@@ -100,9 +101,9 @@ namespace arabic_translit
                 $line=~s/\x{016B}/\x{0077}/g;
                 #all u macrons to w 
                 */
-                tmp_line = tmp_line.Replace("\b\u0061", "\u004C");
-                tmp_line = tmp_line.Replace("\b\u0075", "\u004C");
-                tmp_line = tmp_line.Replace("\b\u0069", "\u0045");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\b\u0061", "\u004C");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\b\u0075", "\u004C");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\b\u0069", "\u0045");
 
                 tmp_line = tmp_line.Replace("\u0100", "\u0041");
                 tmp_line = tmp_line.Replace("\u0101", "\u0041");
@@ -137,10 +138,10 @@ namespace arabic_translit
                 $line=~s/Oa/L/g;
                 $line=~s/O/C/g;
                 */
-                tmp_line = tmp_line.Replace("\bOE", "E");
-                tmp_line = tmp_line.Replace("\bOL", "L");
-                tmp_line = tmp_line.Replace("\bOM", "M");
-                tmp_line = tmp_line.Replace("\bOA", "A");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\bOE", "E");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\bOL", "L");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\bOM", "M");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\bOA", "A");
 
                 tmp_line = tmp_line.Replace("Oi", "Y");
                 tmp_line = tmp_line.Replace("iO", "Y");
@@ -226,9 +227,10 @@ namespace arabic_translit
                 tmp_line = tmp_line.Replace("dh", "X");
                 tmp_line = tmp_line.Replace("ch", "C");
 
-                tmp_line = tmp_line.Replace("ah\b", "aQ");
-                tmp_line = tmp_line.Replace("Ah\b", "AQ");
-
+                //Console.WriteLine(tmp_line);
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"ah\b", "aQ");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"Ah\b", "AQ");
+                //Console.WriteLine(tmp_line);
                 /*
                  * #STEP 3 A COLLAPSE ALL DOUBLE LETTERS
                 $line=~s/bb/b/g;
@@ -305,16 +307,16 @@ namespace arabic_translit
                 $line=~s/Ll-/Al/g;
                 $line=~s/al-/Al/g;
                 */
-                tmp_line = tmp_line.Replace("\bLlAQ\b", "Lllh");
-                tmp_line = tmp_line.Replace("\bElAQ\b", "Elh");
-                tmp_line = tmp_line.Replace("\blAQ\b", "llh");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\bLlAQ\b", "Lllh");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\bElAQ\b", "Elh");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\blAQ\b", "llh");
 
-                tmp_line = tmp_line.Replace("\braHmAn\b", "rHmn");
-                tmp_line = tmp_line.Replace("\bcamr\b", "cmrw");
-                tmp_line = tmp_line.Replace("\bhAXA\b", "hXA");
-                tmp_line = tmp_line.Replace("\bhAXihi\b", "hXh");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\braHmAn\b", "rHmn");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\bcamr\b", "cmrw");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\bhAXA\b", "hXA");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\bhAXihi\b", "hXh");
 
-                tmp_line = tmp_line.Replace("at al-\b", "Q al-");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"at al-\b", "Q al-");
 
                 tmp_line = tmp_line.Replace("Ll-", "Al");
                 tmp_line = tmp_line.Replace("al-", "Al");
@@ -332,6 +334,9 @@ namespace arabic_translit
                 $line=~s/u//g;
                 $line=~s/i//g;
                 */
+
+                //this doesn't look right - need to see what the 
+                //perl value is doing here.
                 tmp_line = tmp_line.Replace("\n-\n", " o ");
 
                 tmp_line = tmp_line.Replace("\u00AD", "");
@@ -373,6 +378,7 @@ namespace arabic_translit
                 $line=~s/\x{0077}/\x{0648}/g; #waw
                 $line=~s/\x{0079}/\x{064A}/g; #ya
                 */
+                
                 tmp_line = tmp_line.Replace("\u0041", "\u0627");
                 tmp_line = tmp_line.Replace("\u004D", "\u0622");
                 tmp_line = tmp_line.Replace("\u0062", "\u0628");
