@@ -26,8 +26,8 @@ namespace arabic_translit
                  * $line = ~s /\b\x{ 0069}\x{ 0062}\x{ 006E} / bn / g; #escape lower-case 'ibn'
                    $line = ~tr / A - Z / a - z /;
                  */
-        tmp_line = tmp_line.Replace("\b\u0069\u006E", "bn");
-                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"[A-Z]", @"[a-z]");
+                tmp_line = tmp_line.Replace("\b\u0069\u0062\u006E", "bn");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"[A-Z]", m => m.ToString().ToLower());
 
 
                 /*
@@ -47,7 +47,7 @@ namespace arabic_translit
                 tmp_line = tmp_line.Replace("\u2032", "\u004F");
                 tmp_line = tmp_line.Replace("\u0027", "\u004F");
                 tmp_line = tmp_line.Replace("\u02BC", "\u004F");
-                tmp_line = tmp_line.Replace("\bQ", "");
+                tmp_line = tmp_line.Replace("\bO", "");
 
                 /*
                  * 
@@ -152,6 +152,7 @@ namespace arabic_translit
                 tmp_line = tmp_line.Replace("AOa", "AC");
                 tmp_line = tmp_line.Replace("AOA", "ACA");
                 tmp_line = tmp_line.Replace("OA", "M");
+                tmp_line = tmp_line.Replace("AO", "AC");
                 tmp_line = tmp_line.Replace("Oa", "L");
                 tmp_line = tmp_line.Replace("O", "C");
 
