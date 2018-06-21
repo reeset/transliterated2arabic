@@ -5,7 +5,7 @@ The code will take transliterated data like:
 Jamāl ʻAbd al-Nāṣir wa-al-ḥarakāt al-siyāsīyah fī ʻUmān
 
 And output:
-[ز]مال ع[ز]بد ال[ز]اصر والحركات السياسيه في ع[ز]مان
+جمال عبد الناصر والحركات السياسيه في عمان
 
 The code is based off of a PERL script created by Mark Muehlhaeusler, who graciously allowed the code to be used and ported into C#.
 
