@@ -230,10 +230,10 @@ namespace arabic_translit
                 tmp_line = tmp_line.Replace("dh", "X");
                 tmp_line = tmp_line.Replace("ch", "C");
 
-                System.Diagnostics.Debug.Print(tmp_line);
+                System.Diagnostics.Debug.Print(tmp_line + "\n");
                 tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"ah\b", "aQ");
                 tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"Ah\b", "AQ");
-                System.Diagnostics.Debug.Print(tmp_line);
+                System.Diagnostics.Debug.Print(tmp_line + "\n");
 
                 /*
                  * #STEP 3 A COLLAPSE ALL DOUBLE LETTERS
@@ -321,12 +321,13 @@ namespace arabic_translit
                 tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\bhAXA\b", "hXA");
                 tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\bhAXihi\b", "hXh");
 
-                System.Diagnostics.Debug.Print(tmp_line);
+                System.Diagnostics.Debug.Print(tmp_line + "\n");
                 //Resotre ta marbutah in idafah, idafa, izafah, izafa construction
                 //I don't think this is perfect, but it seems to be closer to correct.
                 tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"at al-\b", "Q al-");
-                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"(at )(.*\b)", "Q $2");
-                System.Diagnostics.Debug.Print(tmp_line);
+                System.Diagnostics.Debug.Print("after first marbuta:" + tmp_line + "\n");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"(at )([\w-]*\b|$)", "Q $2");
+                System.Diagnostics.Debug.Print("after second marbuta: " + tmp_line  + "\n");
 
                 
                 tmp_line = tmp_line.Replace("Ll-", "Al");
@@ -392,7 +393,8 @@ namespace arabic_translit
                 $line=~s/\x{0079}/\x{064A}/g; #ya
                 */
 
-                Console.WriteLine(tmp_line);
+                System.Diagnostics.Debug.Print(tmp_line + "\n");
+                //Console.WriteLine(tmp_line);
                 tmp_line = tmp_line.Replace("\u0041", "\u0627");
                 tmp_line = tmp_line.Replace("\u004D", "\u0622");
                 tmp_line = tmp_line.Replace("\u0062", "\u0628");
