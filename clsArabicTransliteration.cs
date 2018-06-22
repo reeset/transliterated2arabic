@@ -21,6 +21,9 @@ namespace arabic_translit
             foreach (string line in lines)
             {
                 tmp_line = line;
+                if (!tmp_line.IsNormalized(NormalizationForm.FormC))
+                    tmp_line = tmp_line.Normalize(NormalizationForm.FormC);
+
                 tmp_line = tmp_line.TrimStart(new char[] { '\uFEFF', '\u200B' });
                 //#STEP 1 disinguish 'ibn and reduce all plain capitals to lower case
                 /*
@@ -227,10 +230,11 @@ namespace arabic_translit
                 tmp_line = tmp_line.Replace("dh", "X");
                 tmp_line = tmp_line.Replace("ch", "C");
 
-                //Console.WriteLine(tmp_line);
+                System.Diagnostics.Debug.Print(tmp_line);
                 tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"ah\b", "aQ");
                 tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"Ah\b", "AQ");
-                //Console.WriteLine(tmp_line);
+                System.Diagnostics.Debug.Print(tmp_line);
+
                 /*
                  * #STEP 3 A COLLAPSE ALL DOUBLE LETTERS
                 $line=~s/bb/b/g;
@@ -307,6 +311,7 @@ namespace arabic_translit
                 $line=~s/Ll-/Al/g;
                 $line=~s/al-/Al/g;
                 */
+                //Console.WriteLine(tmp_line);
                 tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\bLlAQ\b", "Lllh");
                 tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\bElAQ\b", "Elh");
                 tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\blAQ\b", "llh");
@@ -316,10 +321,17 @@ namespace arabic_translit
                 tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\bhAXA\b", "hXA");
                 tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\bhAXihi\b", "hXh");
 
+                System.Diagnostics.Debug.Print(tmp_line);
+                //Resotre ta marbutah in idafah, idafa, izafah, izafa construction
+                //I don't think this is perfect, but it seems to be closer to correct.
                 tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"at al-\b", "Q al-");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"(at )(.*\b)", "Q $2");
+                System.Diagnostics.Debug.Print(tmp_line);
 
+                
                 tmp_line = tmp_line.Replace("Ll-", "Al");
                 tmp_line = tmp_line.Replace("al-", "Al");
+                
 
                 /*
                  * #STEP Y REPLACE HYPHENS IN DATES WITH PLACEHOLDERS
@@ -345,6 +357,7 @@ namespace arabic_translit
                 tmp_line = tmp_line.Replace("u", "");
                 tmp_line = tmp_line.Replace("i", "");
 
+                //Console.WriteLine(tmp_line);
                 /*
                  * 
                  $line=~s/\x{0041}/\x{0627}/g; #alif
@@ -378,7 +391,8 @@ namespace arabic_translit
                 $line=~s/\x{0077}/\x{0648}/g; #waw
                 $line=~s/\x{0079}/\x{064A}/g; #ya
                 */
-                
+
+                Console.WriteLine(tmp_line);
                 tmp_line = tmp_line.Replace("\u0041", "\u0627");
                 tmp_line = tmp_line.Replace("\u004D", "\u0622");
                 tmp_line = tmp_line.Replace("\u0062", "\u0628");
@@ -434,6 +448,32 @@ namespace arabic_translit
 
                 tmp_line = tmp_line.Replace("\u0070", "\u067E");
                 tmp_line = tmp_line.Replace("\u0047", "\u0686");
+
+                //Catch numbers
+                /*
+                 * 30 - 0 - 0660
+                31 - 1 - 0661
+                32 - 2 - 0662
+                33 - 3 - 0663
+                34 - 4 - 0664
+                35 - 5 - 0665
+                36 - 6 - 0666
+                37 - 7 - 0667
+                38 - 8 - 0668
+                39 - 9 - 0669
+                */
+                tmp_line = tmp_line.Replace("\u0030", "\u0660");
+                tmp_line = tmp_line.Replace("\u0031", "\u0661");
+                tmp_line = tmp_line.Replace("\u0032", "\u0662");
+                tmp_line = tmp_line.Replace("\u0033", "\u0663");
+                tmp_line = tmp_line.Replace("\u0034", "\u0664");
+                tmp_line = tmp_line.Replace("\u0035", "\u0665");
+                tmp_line = tmp_line.Replace("\u0036", "\u0666");
+                tmp_line = tmp_line.Replace("\u0037", "\u0667");
+                tmp_line = tmp_line.Replace("\u0038", "\u0668");
+                tmp_line = tmp_line.Replace("\u0039", "\u0669");
+
+
 
                 tmp_record += tmp_line + System.Environment.NewLine;
             }
