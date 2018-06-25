@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace arabic_translit
+namespace meTransliterate
 {
-    class clsArabicTransliteration
+    public class clsArabic
     {
         /*
-         * Transliterated2Arabic is based on PERL code originally written by
-         * Mark Muehlhaeusler <mpm97@georgetown.edu> 
-         */
+  * Transliterated2Arabic is based on PERL code originally written by
+  * Mark Muehlhaeusler <mpm97@georgetown.edu> 
+  */
         public string Transliterated2Arabic(string record)
         {
             string[] lines = record.Split("\n".ToCharArray());
@@ -327,12 +327,12 @@ namespace arabic_translit
                 tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"at al-\b", "Q al-");
                 System.Diagnostics.Debug.Print("after first marbuta:" + tmp_line + "\n");
                 tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"(at )([\w-]*\b|$)", "Q $2");
-                System.Diagnostics.Debug.Print("after second marbuta: " + tmp_line  + "\n");
+                System.Diagnostics.Debug.Print("after second marbuta: " + tmp_line + "\n");
 
-                
+
                 tmp_line = tmp_line.Replace("Ll-", "Al");
                 tmp_line = tmp_line.Replace("al-", "Al");
-                
+
 
                 /*
                  * #STEP Y REPLACE HYPHENS IN DATES WITH PLACEHOLDERS
@@ -481,5 +481,256 @@ namespace arabic_translit
             }
             return tmp_record;
         }
+
+        public string Arabic2Transliterated(string record)
+        {
+            string[] lines = record.Split("\n".ToCharArray());
+            string tmp_line = "";
+            string tmp_record = "";
+
+            foreach (string line in lines)
+            {
+                tmp_line = line;
+                if (!tmp_line.IsNormalized(NormalizationForm.FormC))
+                    tmp_line = tmp_line.Normalize(NormalizationForm.FormC);
+
+                tmp_line = tmp_line.TrimStart(new char[] { '\uFEFF', '\u200B' });
+
+                //Catch numbers
+                /*
+                 * 30 - 0 - 0660
+                31 - 1 - 0661
+                32 - 2 - 0662
+                33 - 3 - 0663
+                34 - 4 - 0664
+                35 - 5 - 0665
+                36 - 6 - 0666
+                37 - 7 - 0667
+                38 - 8 - 0668
+                39 - 9 - 0669
+                */
+                tmp_line = tmp_line.Replace("\u0660", "\u0030");
+                tmp_line = tmp_line.Replace("\u0661", "\u0031");
+                tmp_line = tmp_line.Replace("\u0662", "\u0032");
+                tmp_line = tmp_line.Replace("\u0663", "\u0033");
+                tmp_line = tmp_line.Replace("\u0664", "\u0034");
+                tmp_line = tmp_line.Replace("\u0665", "\u0035");
+                tmp_line = tmp_line.Replace("\u0666", "\u0036");
+                tmp_line = tmp_line.Replace("\u0667", "\u0037");
+                tmp_line = tmp_line.Replace("\u0668", "\u0038");
+                tmp_line = tmp_line.Replace("\u0669", "\u0039");
+
+                tmp_line = tmp_line.Replace("\u0686", "\u0047");
+                tmp_line = tmp_line.Replace("\u067E", "\u0070");
+
+                tmp_line = tmp_line.Replace("\u0649", "\u0065");
+                tmp_line = tmp_line.Replace("\u0625", "\u0045");
+                tmp_line = tmp_line.Replace("\u0626", "\u0059");
+                tmp_line = tmp_line.Replace("\u0624", "\u0057");
+                tmp_line = tmp_line.Replace("\u0623", "\u004C");
+                tmp_line = tmp_line.Replace("\u0621", "\u0043");
+
+
+                System.Diagnostics.Debug.Print(tmp_line + "\n");
+                //Console.WriteLine(tmp_line);
+                tmp_line = tmp_line.Replace("\u064A", "\u0079");
+                tmp_line = tmp_line.Replace("\u0648", "\u0077");
+                tmp_line = tmp_line.Replace("\u0647", "\u0068");
+                tmp_line = tmp_line.Replace("\u0646", "\u006E");
+                tmp_line = tmp_line.Replace("\u0645", "\u006D");
+                tmp_line = tmp_line.Replace("\u0644", "\u006C");
+                tmp_line = tmp_line.Replace("\u0643", "\u006B");
+                tmp_line = tmp_line.Replace("\u0642", "\u0071");
+                tmp_line = tmp_line.Replace("\u0641", "\u0066");
+                tmp_line = tmp_line.Replace("\u063A", "\u0067");
+                tmp_line = tmp_line.Replace("\u0639", "\u0063");
+                tmp_line = tmp_line.Replace("\u0638", "\u005A");
+                tmp_line = tmp_line.Replace("\u0638", "\u005A");
+                tmp_line = tmp_line.Replace("\u0637", "\u0054");
+                tmp_line = tmp_line.Replace("\u0636", "\u0044");
+                tmp_line = tmp_line.Replace("\u0635", "\u0053");
+                tmp_line = tmp_line.Replace("\u0634", "\u004B");
+                tmp_line = tmp_line.Replace("\u0633", "\u0073");
+                tmp_line = tmp_line.Replace("\u0632", "\u007A");
+                tmp_line = tmp_line.Replace("\u0631", "\u0072");
+                tmp_line = tmp_line.Replace("\u0630", "\u0058");
+                tmp_line = tmp_line.Replace("\u062F", "\u0064");
+                tmp_line = tmp_line.Replace("\u062E", "\u0078");
+                tmp_line = tmp_line.Replace("\u062D", "\u0048");
+                tmp_line = tmp_line.Replace("\u062C", "\u006A");
+                tmp_line = tmp_line.Replace("\u062B", "\u0056");
+                tmp_line = tmp_line.Replace("\u0629", "\u0051");
+                tmp_line = tmp_line.Replace("\u062A", "\u0074");
+                tmp_line = tmp_line.Replace("\u0628", "\u0062");
+                tmp_line = tmp_line.Replace("\u0622", "\u004D");
+                tmp_line = tmp_line.Replace("\u0627", "\u0041");
+
+
+
+                ////this doesn't look right - need to see what the 
+                ////perl value is doing here.
+                //tmp_line = tmp_line.Replace("\n-\n", " o ");
+
+                //tmp_line = tmp_line.Replace("\u00AD", "");
+                //tmp_line = tmp_line.Replace("\u002D", "");
+                //tmp_line = tmp_line.Replace("a", "");
+                //tmp_line = tmp_line.Replace("u", "");
+                //tmp_line = tmp_line.Replace("i", "");
+
+                tmp_line = tmp_line.Replace("Al", "al-");
+
+                System.Diagnostics.Debug.Print(tmp_line + "\n");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"Q al -\b", @"at al - "); System.Diagnostics.Debug.Print("after first marbuta: " + tmp_line + "\n");
+                System.Diagnostics.Debug.Print("after first marbuta:" + tmp_line + "\n");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"(Q )([\w-]*\b|$)", "at $2");
+                //Resotre ta marbutah in idafah, idafa, izafah, izafa construction
+                //I don't think this is perfect, but it seems to be closer to correct.
+                System.Diagnostics.Debug.Print("after second marbuta: " + tmp_line + "\n");
+
+
+
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\bhXh\b", @"hAXihi");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\bhXA\b", @"hAXA");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\bcmrw\b", @"camr");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\brHmn\b", @"raHmAn");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\bElh\b", @"ElAQ");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\bLllh\b", @"LlAQ");
+
+
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\blAQ\b", @"llh");
+
+                /*
+                                tmp_line = tmp_line.Replace("b", "bb");
+                                tmp_line = tmp_line.Replace("c", "cc");
+                                tmp_line = tmp_line.Replace( "d", "dd");
+                                tmp_line = tmp_line.Replace("D", "DD");
+                                tmp_line = tmp_line.Replace("f", "ff");
+                                tmp_line = tmp_line.Replace("g", "gg");
+                                tmp_line = tmp_line.Replace("G", "GG");
+                                tmp_line = tmp_line.Replace("h", "hh");
+                                tmp_line = tmp_line.Replace("H", "HH");
+                                tmp_line = tmp_line.Replace("j", "jj");
+                                tmp_line = tmp_line.Replace("k", "kk");
+                                tmp_line = tmp_line.Replace("K", "KK");
+                                tmp_line = tmp_line.Replace("l", "ll");
+                                tmp_line = tmp_line.Replace("m", "mm");
+                                tmp_line = tmp_line.Replace("n", "nn");
+                                tmp_line = tmp_line.Replace("qq", "q");
+                                tmp_line = tmp_line.Replace("r", "rr");
+                                tmp_line = tmp_line.Replace("s", "ss");
+                                tmp_line = tmp_line.Replace("t", "tt");
+                                tmp_line = tmp_line.Replace("T", "TT");
+                                tmp_line = tmp_line.Replace("V", "VV");
+                                tmp_line = tmp_line.Replace("w", "ww");
+                                tmp_line = tmp_line.Replace("x", "xx");
+                                tmp_line = tmp_line.Replace("y", "yy");
+                                tmp_line = tmp_line.Replace("z", "zz");
+                */
+
+                tmp_line = tmp_line.Replace("g", "gh");
+                tmp_line = tmp_line.Replace("K", "sh");
+                tmp_line = tmp_line.Replace("x", "kh");
+                tmp_line = tmp_line.Replace("V", "th");
+                tmp_line = tmp_line.Replace("X", "dh");
+                tmp_line = tmp_line.Replace("C", "ch");
+
+                System.Diagnostics.Debug.Print(tmp_line + "\n");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"aQ\b", @"ah");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"AQ\b", @"Ah");
+                System.Diagnostics.Debug.Print(tmp_line + "\n");
+
+
+                tmp_line = tmp_line.Replace("\u0048", "\u1E24");
+                //                tmp_line = tmp_line.Replace("\u1E25", "\u0048");
+
+                tmp_line = tmp_line.Replace("\u0044", "\u1E0C");
+                //                tmp_line = tmp_line.Replace("\u1E0D", "\u0044");
+
+                tmp_line = tmp_line.Replace("\u0053", "\u1E62");
+                //                tmp_line = tmp_line.Replace("\u1E63", "\u0053");
+
+                tmp_line = tmp_line.Replace("\u0054", "\u1E6C");
+                //                tmp_line = tmp_line.Replace("\u1E6D", "\u0054");
+
+                tmp_line = tmp_line.Replace("\u005A", "\u1E92");
+                //                tmp_line = tmp_line.Replace("\u1E93", "\u005A");
+
+                tmp_line = tmp_line.Replace("\u0065", "\u00E1");
+
+                tmp_line = tmp_line.Replace("\u0063", "\u02BB");
+
+
+                tmp_line = tmp_line.Replace("C", "O");
+                //                tmp_line = tmp_line.Replace("L", "Oa");
+                tmp_line = tmp_line.Replace("L", "aO");
+                tmp_line = tmp_line.Replace("AC", "AO");
+                tmp_line = tmp_line.Replace("M", "OA");
+                tmp_line = tmp_line.Replace("ACA", "AOA");
+                tmp_line = tmp_line.Replace("AC", "AOa");
+                tmp_line = tmp_line.Replace("Ww", "Ow");
+                tmp_line = tmp_line.Replace("W", "uO");
+                tmp_line = tmp_line.Replace("yY", "yO");
+                tmp_line = tmp_line.Replace("Yy", "Oy");
+
+                tmp_line = tmp_line.Replace("Y", "Oi");
+                //                tmp_line = tmp_line.Replace("iO", "Y");
+
+
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\bA", @"OA");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\bM", @"OM");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\bL", @"OL");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\bE", @"OE");
+
+
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\b\u004C", "\u0061");
+                //                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\b\u0075", "\u004C");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\b\u0045", "\u0069");
+
+                tmp_line = tmp_line.Replace("\u0041", "\u0100");
+                //                tmp_line = tmp_line.Replace("\u0101", "\u0041");
+
+                tmp_line = tmp_line.Replace("\u0079", "\u012A");
+                //                tmp_line = tmp_line.Replace("\u012B", "\u0079");
+
+                tmp_line = tmp_line.Replace("\u0077", "\u016A");
+                //                tmp_line = tmp_line.Replace("\u016B", "\u0077");
+
+
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\b\u004C\u0079", "\u0061\u0079");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\b\u004C\u0077", "\u0061\u0077");
+                //                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\b\u016B", "\u004C\u0077");
+                //                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\b\u016A", "\u004C\u0077");
+
+
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, "\b\u0045\u0079", "\u012B");
+                //                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\b\u012A", "\u0045\u0079");
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\b\u004D", "\u0101");
+                //                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\b\u0100", "\u004D");
+
+
+                tmp_line = tmp_line.Replace("\u0063", "\u02BB");
+                tmp_line = tmp_line.Replace("\u004F", "\u2019");
+                //                tmp_line = tmp_line.Replace("\u2032", "\u004F");
+                //                tmp_line = tmp_line.Replace("\u0027", "\u004F");
+                //                tmp_line = tmp_line.Replace("\u02BC", "\u004F");
+                // tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\bO", "");
+
+
+
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"\bbn", "\u0069\u0062\u006E");
+                //tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"[A-Z]", m => m.ToString().ToLower());
+                tmp_line = tmp_line.ToLowerInvariant();
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, @"(al-)(.)", m => m.Groups[1].Value + m.Groups[2].Value.ToUpperInvariant());
+
+                if (!tmp_line.StartsWith("al-"))
+                {
+                    tmp_line = tmp_line.Substring(0, 1).ToUpperInvariant() + tmp_line.Substring(1);
+                }
+
+                tmp_record += tmp_line + System.Environment.NewLine;
+            }
+            return tmp_record;
+        }
+
     }
 }
