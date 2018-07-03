@@ -289,6 +289,12 @@ namespace meTransliterate
                 tmp_line = tmp_line.Replace("yy", "y");
                 tmp_line = tmp_line.Replace("zz", "z");
 
+
+                //this takes all doubles and converts them to singles.
+                //curious if this isn't true of vowels?
+                tmp_line = System.Text.RegularExpressions.Regex.Replace(tmp_line, "(.)\\1+", "$1");
+                
+
                 /*
                  #STEP W restore conventional orthography
 
